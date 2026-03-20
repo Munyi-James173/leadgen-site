@@ -4,68 +4,119 @@ import { useAnalytics } from '../hooks/useAnalytics'
 
 const testimonials = [
   {
-    quote: "Apex didn't just build us a website—they rebuilt our entire lead capture pipeline. We went from 40 leads a month to over 300 in the first quarter.",
-    name: 'Sarah Chen',
-    role: 'CEO, Meridian SaaS',
-    avatar: 'SC',
-    color: 'from-purple-500/20 to-blue-500/20',
+    quote: "Before Apex, we were burning $14,000/month on ads with nothing to show for it. Within 60 days they rebuilt our entire funnel, cut our cost-per-lead by 68%, and we hit our best revenue quarter ever. I wish we'd found them two years earlier.",
+    name: 'Daniel Okafor',
+    role: 'CEO, BrightPath SaaS',
+    avatar: 'DO',
+    metric: '68%',
+    metricLabel: 'Lower cost-per-lead',
+    gradient: 'from-violet-600/20 to-indigo-600/20',
+    accentColor: '#a78bfa',
   },
   {
-    quote: "Their conversion-first approach is unlike any agency I've worked with. Every decision ties back to revenue. We 4×'d our pipeline value in six months.",
-    name: 'Marcus Williams',
+    quote: "We launched a brand new product with zero audience. Apex built the landing page, the email sequences, and the ad creative from scratch. We closed $380,000 in pre-sales in the first 30 days. Their team works like they have equity in your business.",
+    name: 'Amara Diallo',
+    role: 'Founder, Kova Fintech',
+    avatar: 'AD',
+    metric: '$380K',
+    metricLabel: 'Pre-sales in 30 days',
+    gradient: 'from-emerald-600/20 to-teal-600/20',
+    accentColor: '#34d399',
+  },
+  {
+    quote: "Our old site took 6.8 seconds to load on mobile. Apex rebuilt it in React and got us to 0.9 seconds. That single change lifted our conversion rate by 41% and moved us from page 3 to position 4 on Google — organically, without a single backlink campaign.",
+    name: 'Sophie Marchetti',
+    role: 'Head of Digital, Solum Media',
+    avatar: 'SM',
+    metric: '0.9s',
+    metricLabel: 'Mobile load time',
+    gradient: 'from-sky-600/20 to-blue-600/20',
+    accentColor: '#38bdf8',
+  },
+  {
+    quote: "I've worked with five agencies in eight years. Most take your money, send reports, and shrug. Apex is different — they own outcomes. When something didn't work, they told us immediately, pivoted, and fixed it at no extra cost. That accountability alone is worth every penny.",
+    name: 'Marcus Wellington',
     role: 'VP Growth, Talara B2B',
     avatar: 'MW',
-    color: 'from-emerald-500/20 to-cyan-500/20',
+    metric: '4.1×',
+    metricLabel: 'Pipeline ROI',
+    gradient: 'from-orange-600/20 to-rose-600/20',
+    accentColor: '#fb923c',
   },
   {
-    quote: "The site they built loads in under a second and our Lighthouse score sits at 98. That alone moved us 14 spots on Google. Phenomenal engineering.",
+    quote: "Our email list was completely dead — 8% open rate, no clicks, no revenue. Apex restructured our segmentation, rewrote every sequence, and set up behavioral triggers. Open rates are now at 44% and our email channel generates $90,000/month on autopilot.",
     name: 'Priya Nair',
-    role: 'Head of Digital, Solum Media',
+    role: 'COO, Revel Commerce',
     avatar: 'PN',
-    color: 'from-orange-500/20 to-rose-500/20',
+    metric: '$90K/mo',
+    metricLabel: 'Email revenue',
+    gradient: 'from-pink-600/20 to-fuchsia-600/20',
+    accentColor: '#e879f9',
   },
   {
-    quote: "From strategy to deployment in 3 weeks. Clean code, beautiful design, and they actually explain what they're doing. Rare combination.",
-    name: 'James O\'Brien',
+    quote: "We needed a full CRM integration, lead scoring system, and automated follow-up flows built in three weeks for a product launch. Apex delivered on day 19. The system has since captured over 2,400 qualified leads and our sales team has never been more productive.",
+    name: 'James Osei',
     role: 'Founder, Fieldstone Labs',
     avatar: 'JO',
-    color: 'from-acid/20 to-lime-500/20',
+    metric: '2,400+',
+    metricLabel: 'Qualified leads captured',
+    gradient: 'from-acid/20 to-lime-600/20',
+    accentColor: '#C8FF00',
   },
   {
-    quote: "Our email automation sequences alone generate $80K/month in recovered revenue. The ROI on this engagement was immediately obvious.",
-    name: 'Amara Osei',
-    role: 'COO, Revel Commerce',
-    avatar: 'AO',
-    color: 'from-pink-500/20 to-violet-500/20',
+    quote: "Apex didn't just redesign our website — they redesigned how we think about growth. The strategy session alone was worth the entire contract. Six months later we've doubled our team, tripled MRR, and we're oversubscribed for the next quarter.",
+    name: 'Lena Hofmann',
+    role: 'Co-Founder, Stratum Analytics',
+    avatar: 'LH',
+    metric: '3×',
+    metricLabel: 'MRR in 6 months',
+    gradient: 'from-cyan-600/20 to-teal-600/20',
+    accentColor: '#22d3ee',
+  },
+  {
+    quote: "The ROI tracking dashboard they built for us surfaced something we'd been missing for 18 months — one ad set was consuming 40% of our budget and converting at 0.3%. We killed it, reallocated, and added $1.2M in attributable revenue in Q3 alone.",
+    name: 'Robert Mwangi',
+    role: 'CMO, Vantage Logistics',
+    avatar: 'RM',
+    metric: '$1.2M',
+    metricLabel: 'Added Q3 revenue',
+    gradient: 'from-amber-600/20 to-yellow-600/20',
+    accentColor: '#fbbf24',
   },
 ]
+
+const STARS = [1, 2, 3, 4, 5]
 
 export default function Testimonials() {
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
+  const [animating, setAnimating] = useState(false)
   const { ref, inView } = useInView()
   const { track } = useAnalytics()
 
-  const next = useCallback(() => {
-    setActive((a) => (a + 1) % testimonials.length)
-  }, [])
+  const goTo = useCallback((index) => {
+    if (animating) return
+    setAnimating(true)
+    setTimeout(() => {
+      setActive(index)
+      setAnimating(false)
+    }, 200)
+  }, [animating])
 
-  const prev = useCallback(() => {
-    setActive((a) => (a - 1 + testimonials.length) % testimonials.length)
-  }, [])
+  const next = useCallback(() => goTo((active + 1) % testimonials.length), [active, goTo])
+  const prev = useCallback(() => goTo((active - 1 + testimonials.length) % testimonials.length), [active, goTo])
 
-  // Auto-advance every 5s unless paused
   useEffect(() => {
     if (paused) return
-    const t = setInterval(next, 5000)
+    const t = setInterval(next, 6000)
     return () => clearInterval(t)
   }, [paused, next])
 
   const handleDot = (i) => {
-    setActive(i)
+    goTo(i)
     track('testimonial_dot_click', { index: i })
     setPaused(true)
-    setTimeout(() => setPaused(false), 8000)
+    setTimeout(() => setPaused(false), 10000)
   }
 
   const t = testimonials[active]
@@ -74,76 +125,199 @@ export default function Testimonials() {
     <section id="testimonials" className="py-28 bg-ink-950 relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-acid/20 to-transparent" />
 
-      {/* Marquee logos strip */}
-      <div className="mb-20 overflow-hidden border-y border-white/5 py-5">
-        <div className="flex gap-16 animate-marquee whitespace-nowrap">
-          {['Meridian', 'Talara', 'Solum Media', 'Fieldstone', 'Revel', 'Orbis', 'Stratum', 'Vantage', 'Pinnacle', 'Nexus',
-            'Meridian', 'Talara', 'Solum Media', 'Fieldstone', 'Revel', 'Orbis', 'Stratum', 'Vantage', 'Pinnacle', 'Nexus'].map((name, i) => (
-            <span key={i} className="font-display font-bold text-sm text-white/20 uppercase tracking-widest shrink-0">{name}</span>
+      {/* Scrolling client name marquee */}
+      <div className="mb-20 overflow-hidden border-y border-white/5 py-4">
+        <div className="flex gap-20 animate-marquee whitespace-nowrap">
+          {[
+            'BrightPath SaaS', 'Kova Fintech', 'Solum Media', 'Talara B2B',
+            'Revel Commerce', 'Fieldstone Labs', 'Stratum Analytics', 'Vantage Logistics',
+            'Orbis Capital', 'Nexus Health', 'Pinnacle RE', 'Meridian Cloud',
+            // duplicate for seamless loop
+            'BrightPath SaaS', 'Kova Fintech', 'Solum Media', 'Talara B2B',
+            'Revel Commerce', 'Fieldstone Labs', 'Stratum Analytics', 'Vantage Logistics',
+            'Orbis Capital', 'Nexus Health', 'Pinnacle RE', 'Meridian Cloud',
+          ].map((name, i) => (
+            <span key={i} className="font-display font-bold text-xs text-white/15 uppercase tracking-[0.2em] shrink-0">
+              {name}
+            </span>
           ))}
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        <div ref={ref} className={`transition-all duration-700 text-center mb-14 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+
+        {/* Section header */}
+        <div
+          ref={ref}
+          className={`text-center mb-16 transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+        >
           <span className="section-label justify-center">
             <span className="w-4 h-px bg-acid" />
-            Testimonials
+            Client Results
             <span className="w-4 h-px bg-acid" />
           </span>
-          <h2 className="font-display font-bold text-4xl md:text-5xl text-white">
-            Don't take our word for it.
+          <h2 className="font-display font-bold text-4xl md:text-5xl text-white mb-4">
+            Real clients. Real numbers.
+            <span className="gradient-text"> No fluff.</span>
           </h2>
+          <p className="font-body text-white/40 text-lg max-w-xl mx-auto">
+            Every testimonial below is tied to a specific outcome we delivered — with the metric to prove it.
+          </p>
         </div>
 
         {/* Main testimonial card */}
         <div
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          className="glass-card p-10 md:p-14 relative overflow-hidden min-h-[280px] flex flex-col justify-between"
+          className={`glass-card relative overflow-hidden transition-opacity duration-200 ${animating ? 'opacity-0' : 'opacity-100'}`}
         >
-          {/* Background gradient */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${t.color} opacity-30 transition-all duration-700 pointer-events-none`} />
+          {/* Dynamic background gradient */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${t.gradient} transition-all duration-700 pointer-events-none`} />
 
-          {/* Quote mark */}
-          <div className="absolute top-8 right-10 font-display text-8xl text-acid/10 select-none leading-none">"</div>
+          {/* Decorative quote mark */}
+          <div className="absolute top-6 right-8 font-display text-[120px] leading-none select-none pointer-events-none"
+               style={{ color: t.accentColor, opacity: 0.07 }}>
+            "
+          </div>
 
-          <blockquote className="relative z-10">
-            <p className="font-body text-xl md:text-2xl text-white/80 leading-relaxed mb-8 font-light">
-              "{t.quote}"
-            </p>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-acid/20 border border-acid/40 flex items-center justify-center shrink-0">
-                <span className="font-display font-bold text-sm text-acid">{t.avatar}</span>
+          <div className="relative z-10 p-8 md:p-12 lg:p-14">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
+
+              {/* Left: metric callout + author */}
+              <div className="lg:col-span-1 flex flex-col justify-between gap-8">
+
+                {/* Big metric */}
+                <div className="glass-card p-6 text-center border-0 bg-white/5">
+                  <div
+                    className="font-display font-extrabold text-4xl mb-1 transition-all duration-500"
+                    style={{ color: t.accentColor }}
+                  >
+                    {t.metric}
+                  </div>
+                  <div className="font-mono text-xs text-white/40 uppercase tracking-wider leading-tight">
+                    {t.metricLabel}
+                  </div>
+                </div>
+
+                {/* Author */}
+                <div className="flex lg:flex-col items-center lg:items-start gap-4">
+                  <div
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 font-display font-bold text-base"
+                    style={{ backgroundColor: `${t.accentColor}22`, border: `1px solid ${t.accentColor}44`, color: t.accentColor }}
+                  >
+                    {t.avatar}
+                  </div>
+                  <div>
+                    <div className="font-display font-semibold text-white text-base">{t.name}</div>
+                    <div className="font-mono text-xs text-white/40 uppercase tracking-wider mt-0.5">{t.role}</div>
+                    {/* Stars */}
+                    <div className="flex gap-0.5 mt-2">
+                      {STARS.map((s) => (
+                        <svg key={s} width="12" height="12" viewBox="0 0 12 12" fill={t.accentColor}>
+                          <path d="M6 1L7.5 4.5H11L8 7L9 10.5L6 8.5L3 10.5L4 7L1 4.5H4.5L6 1Z"/>
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <div className="font-display font-semibold text-white">{t.name}</div>
-                <div className="font-mono text-xs text-white/40 uppercase tracking-wider">{t.role}</div>
+
+              {/* Right: quote */}
+              <div className="lg:col-span-3 flex flex-col justify-center">
+                <p className="font-body text-xl md:text-2xl text-white/85 leading-relaxed font-light">
+                  "{t.quote}"
+                </p>
               </div>
             </div>
-          </blockquote>
 
-          {/* Navigation */}
-          <div className="relative z-10 flex items-center justify-between mt-10 pt-6 border-t border-white/5">
-            <div className="flex gap-2">
-              {testimonials.map((_, i) => (
+            {/* Navigation row */}
+            <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between">
+
+              {/* Dots */}
+              <div className="flex gap-2 flex-wrap">
+                {testimonials.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleDot(i)}
+                    className="transition-all duration-300 rounded-full"
+                    style={{
+                      width: i === active ? '24px' : '8px',
+                      height: '8px',
+                      backgroundColor: i === active ? t.accentColor : 'rgba(255,255,255,0.15)',
+                    }}
+                    aria-label={`Testimonial ${i + 1}`}
+                  />
+                ))}
+              </div>
+
+              {/* Prev / Next */}
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-xs text-white/25">
+                  {active + 1} / {testimonials.length}
+                </span>
                 <button
-                  key={i}
-                  onClick={() => handleDot(i)}
-                  className={`transition-all duration-300 rounded-full ${i === active ? 'w-6 h-2 bg-acid' : 'w-2 h-2 bg-white/20 hover:bg-white/40'}`}
-                  aria-label={`Go to testimonial ${i + 1}`}
-                />
-              ))}
-            </div>
-            <div className="flex gap-3">
-              <button onClick={() => { prev(); setPaused(true) }} className="w-10 h-10 glass-card hover:border-acid/40 flex items-center justify-center transition-colors">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-              </button>
-              <button onClick={() => { next(); setPaused(true) }} className="w-10 h-10 glass-card hover:border-acid/40 flex items-center justify-center transition-colors">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-              </button>
+                  onClick={() => { prev(); setPaused(true) }}
+                  className="w-10 h-10 glass-card hover:border-white/30 flex items-center justify-center text-white/50 hover:text-white transition-all"
+                  aria-label="Previous"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <button
+                  onClick={() => { next(); setPaused(true) }}
+                  className="w-10 h-10 glass-card hover:border-white/30 flex items-center justify-center text-white/50 hover:text-white transition-all"
+                  aria-label="Next"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Bottom mini-cards grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          {testimonials.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => handleDot(i)}
+              className={`glass-card p-4 text-left transition-all duration-300 hover:scale-105
+                ${i === active ? 'border-white/20 bg-white/8' : 'hover:border-white/15'}`}
+            >
+              <div
+                className="font-display font-bold text-xl mb-1"
+                style={{ color: item.accentColor }}
+              >
+                {item.metric}
+              </div>
+              <div className="font-mono text-xs text-white/35 uppercase tracking-wider leading-tight line-clamp-2">
+                {item.metricLabel}
+              </div>
+              <div className="font-body text-xs text-white/30 mt-2 truncate">{item.name}</div>
+            </button>
+          ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-16 text-center">
+          <p className="font-body text-white/40 mb-6">
+            Join 140+ companies that chose growth over guesswork.
+          </p>
+          <button
+            onClick={() => {
+              track('testimonials_cta_click')
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+            }}
+            className="btn-primary"
+          >
+            Get Results Like These
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
       </div>
     </section>
