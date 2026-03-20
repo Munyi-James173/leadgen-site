@@ -13,6 +13,8 @@ function getSessionId() {
 
 export function useAnalytics() {
   const track = useCallback(async (eventType, eventData = {}) => {
+    // Wait until the server is likely ready (avoids ECONNRESET on first render)
+    await new Promise((r) => setTimeout(r, 300))
     try {
       await fetch('/api/analytics', {
         method: 'POST',
@@ -24,7 +26,7 @@ export function useAnalytics() {
         }),
       })
     } catch {
-      // Fail silently — analytics should never break UX
+      // Fail silently — analytics must never break UX
     }
   }, [])
 
