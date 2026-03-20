@@ -1,0 +1,15 @@
+{
+  "name": "leadgen-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Full-stack lead generation site — React/Vite frontend + Node/Express backend + Supabase",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "install:all": "npm install --prefix client && npm install --prefix server",
+    "build": "npm run build --prefix client",
+    "start:server": "npm run start --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

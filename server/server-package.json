@@ -1,0 +1,33 @@
+{
+  "name": "leadgen-server",
+  "version": "1.0.0",
+  "description": "Lead generation API server — captures leads and analytics into Supabase",
+  "main": "src/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "audit:fix": "npm audit fix"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.47.10",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "nodemailer": "^6.9.16",
+    "validator": "^13.12.0"
+  },
+  "overrides": {
+    "path-to-regexp": "^8.2.0",
+    "nodemailer": "^6.9.16",
+    "semver": "^7.6.3",
+    "tough-cookie": "^4.1.4",
+    "ip": "^2.0.1",
+    "braces": "^3.0.3",
+    "micromatch": "^4.0.8"
+  }
+}
